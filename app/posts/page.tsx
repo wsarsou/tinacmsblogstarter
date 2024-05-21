@@ -1,7 +1,9 @@
+import { PostListPageComponent } from "@/components/app/posts/post-list-page"
+import client from "@/tina/__generated__/client"
 import React from "react"
 
-function page() {
-  return <div>page</div>
-}
+export default async function PostListPage() {
+  const result = await client.queries.postConnection()
 
-export default page
+  return <PostListPageComponent {...result} />
+}

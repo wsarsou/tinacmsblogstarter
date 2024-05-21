@@ -1,4 +1,5 @@
 import { defineConfig } from "tinacms"
+import { richTextComponents } from "./richtext-schema"
 
 // Your hosting provider likely exposes this as an environment variable
 const branch =
@@ -46,6 +47,7 @@ export default defineConfig({
             type: "rich-text",
             label: "Body",
             isBody: true,
+            templates: richTextComponents,
           },
         ],
         ui: {
@@ -55,6 +57,13 @@ export default defineConfig({
               return `/`
             }
             return undefined
+          },
+          filename: {
+            slugify: (values) => {
+              return `${(values.title || "")
+                .toLowerCase()
+                .replace(/ /g, "-")}`.replace(/[^\w\.\/-\s]/gi, "")
+            },
           },
         },
       },
@@ -72,16 +81,23 @@ export default defineConfig({
             required: true,
           },
           {
-            name: "body",
-            type: "rich-text",
-            label: "Body",
-            isBody: true,
+            name: "date",
+            type: "datetime",
+            label: "Date",
+            required: true,
+          },
+          {
+            name: "tags",
+            type: "string",
+            label: "Tags",
+            list: true,
           },
           {
             name: "body",
             type: "rich-text",
             label: "Body",
             isBody: true,
+            templates: richTextComponents,
           },
         ],
         defaultItem: () => {
@@ -96,6 +112,43 @@ export default defineConfig({
             return `/posts/${document._sys.filename}`
           },
 
+          filename: {
+            slugify: (values) => {
+              return `${(values.title || "")
+                .toLowerCase()
+                .replace(/ /g, "-")}`.replace(/[^\w\.\/-\s]/gi, "")
+            },
+          },
+        },
+      },
+      {
+        name: "project",
+        label: "Projects",
+        path: "content/project",
+
+        fields: [
+          {
+            name: "title",
+            type: "string",
+            label: "Title",
+            isTitle: true,
+            required: true,
+          },
+          {
+            name: "description",
+            type: "string",
+            label: "Description",
+            isBody: true,
+          },
+          {
+            name: "link",
+            type: "string",
+            label: "Link",
+            isBody: true,
+          },
+        ],
+
+        ui: {
           filename: {
             slugify: (values) => {
               return `${(values.title || "")
